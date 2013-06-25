@@ -24,6 +24,7 @@ Usage
 -----
 
 import the module:
+
     from pynagios import pynagios
 
 First step you should create one or more services and apply a few properties:
