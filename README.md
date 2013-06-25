@@ -40,9 +40,11 @@ The library will autmatically convert the percentage into the absolute values.
 However you cannot mix percentage and absolute values.
 
 Example 1:
+
     service1 = pynagios.Service("Service1", 230, 850, 950, 1000)
 
 Example 2:
+
     service2 = pynagios.service("Service2")
     service2.set_value(75)
     service2.set_max_level(100)
