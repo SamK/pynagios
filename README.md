@@ -37,54 +37,58 @@ The basics steps are:
 
 Example:
 
-    # 1. import the module
-    from pynagios import pynagios
+```python
+# 1. import the module
+from pynagios import pynagios
 
-    # 2. create a nagios instance
-    nagios = pynagios.Nagios()
+# 2. create a nagios instance
+nagios = pynagios.Nagios()
 
-    # 3. create your service
-    my_service = pynagios.Service("Service1", 230, 850, 950, 1000)
+# 3. create your service
+my_service = pynagios.Service("Service1", 230, 850, 950, 1000)
 
-    # 4. add your service into the nagios instance
-    nagios.add(my_service)
+# 4. add your service into the nagios instance
+nagios.add(my_service)
 
-    # 5. print the result
-    print nagios.output()
+# 5. print the result
+print nagios.output()
 
-    # 6. exit with the appropriate
-    nagios.exit()
+# 6. exit with the appropriate
+nagios.exit()
+```
 
 Example 2:
 
-    # 1. import the module
-    from pynagios import pynagios
+```python
+# 1. import the module
+from pynagios import pynagios
 
-    # 2. create a nagios instance
-    nagios = pynagios.Nagios()
+# 2. create a nagios instance
+nagios = pynagios.Nagios()
 
-    # 3. create the first service
-    service1 = pynagios.Service("Service1", 230, 850, 950, 1000)
+# 3. create the first service
+service1 = pynagios.Service("Service1", 230, 850, 950, 1000)
 
-    # 3b. create the second service
-    service2 = pynagios.service("Service2")
-    service2.set_value(75)
-    service2.set_max_level(100)
-    service2.set_crit_level('75%')
-    service2.set_warn_level('85%')
+# 3b. create the second service
+service2 = pynagios.service("Service2")
+service2.set_value(75)
+service2.set_max_level(100)
+service2.set_crit_level('75%')
+service2.set_warn_level('85%')
 
-    # 3c. enable perfdata
-    service2.perfdata()
+# 3c. enable perfdata
+service2.perfdata()
 
-    # 4. add the services into the nagios instance
-    nagios.add(service1)
-    nagios.add(service2)
+# 4. add the services into the nagios instance
+nagios.add(service1)
+nagios.add(service2)
 
-    # 5. print the result
-    print nagios.output()
+# 5. print the result
+print nagios.output()
 
-    # 6. exit with the appropriate
-    nagios.exit()
+# 6. exit with the appropriate
+nagios.exit()
+```
 
 The pynagios.Service() class accepts these arguments:
 * name
