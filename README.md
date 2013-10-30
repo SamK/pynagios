@@ -35,7 +35,7 @@ The basics steps are:
 6. exit
 
 
-Example:
+Example 1:
 
 ```python
 # 1. import the module
@@ -53,7 +53,7 @@ nagios.add(my_service)
 # 5. print the result
 print nagios.output()
 
-# 6. exit with the appropriate
+# 6. exit with the appropriate exit code
 nagios.exit()
 ```
 
@@ -76,7 +76,7 @@ service2.set_max_level(100)
 service2.set_crit_level('75%')
 service2.set_warn_level('85%')
 
-# 3c. enable perfdata
+# 3c. enable perfdata for service2
 service2.perfdata()
 
 # 4. add the services into the nagios instance
