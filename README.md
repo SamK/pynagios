@@ -34,30 +34,7 @@ The basics steps are:
 5. print the result
 6. exit
 
-
-Example 1:
-
-```python
-# 1. import the module
-from pynagios import pynagios
-
-# 2. create a nagios instance
-nagios = pynagios.Nagios()
-
-# 3. create your service
-my_service = pynagios.Service("Service1", 230, 850, 950, 1000)
-
-# 4. add your service into the nagios instance
-nagios.add(my_service)
-
-# 5. print the result
-print nagios.output()
-
-# 6. exit with the appropriate exit code
-nagios.exit()
-```
-
-Example 2:
+Example:
 
 ```python
 # 1. import the module
@@ -67,7 +44,11 @@ from pynagios import pynagios
 nagios = pynagios.Nagios()
 
 # 3. create the first service
-service1 = pynagios.Service("Service1", 230, 850, 950, 1000)
+service1 = pynagios.service("Service1")
+service1.set_value(230)
+service1.set_max_level(100)
+service1.set_warn_level(850)
+service1.set_crit_level(950)
 
 # 3b. create the second service
 service2 = pynagios.service("Service2")
@@ -75,7 +56,6 @@ service2.set_value(75)
 service2.set_max_level(100)
 service2.set_crit_level('75%')
 service2.set_warn_level('85%')
-
 # 3c. enable perfdata for service2
 service2.perfdata()
 
@@ -89,13 +69,6 @@ print nagios.output()
 # 6. exit with the appropriate
 nagios.exit()
 ```
-
-The pynagios.Service() class accepts these arguments:
-* name
-* current value
-* warning value
-* critical value
-* maximum value
 
 The service value can be integers (1, 2, 3), floats (3.14, 13.37), or strings.
 
