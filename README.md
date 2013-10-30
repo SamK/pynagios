@@ -54,8 +54,8 @@ service1.set_crit_level(950)
 service2 = pynagios.service("Service2")
 service2.set_value(75)
 service2.set_max_level(100)
-service2.set_crit_level('75%')
 service2.set_warn_level('85%')
+service2.set_crit_level('95%')
 # 3c. enable perfdata for service2
 service2.perfdata()
 
