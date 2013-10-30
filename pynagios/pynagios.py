@@ -18,10 +18,6 @@ proud of your work:
 
   pylint --report=n --disable=R0902 pynagios/pynagios.py
 
-* How to create the documentation:
-
-  pydoc -w  pynagios.pynagios
-
 = References:
 
 * How to write Nagios plugins:
@@ -34,18 +30,20 @@ import sys
 __author__ = "Samuel Krieg"
 __email__ = "samuel.krieg+github@gmail.com"
 __version__ = "0.11"
-__status__ = "Dev"
+__status__ = "Prod"
 
 
 class NagiosError(Exception):
     """ Defines a custom error.
-        This class just inherits from the standard Exceptio
+        This class just inherits from the standard Exception
+        and does nothing more but changing the name.
     """
     pass
 
 
 class Service:
-    """This is the nagios service. Each service has one value and one status"""
+    """This is the nagios service. Each service has one value and one status.
+    """
 
     label = None
     _value = None
