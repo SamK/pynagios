@@ -1,18 +1,31 @@
 #!/usr/bin/env python
 """
+= Module description:
+
 This module is an attempt to calculate Nagios results from a Python script
 
-This file tends to be PEP-8 compliant.
-  pep8 --ignore=E111 --ignore=E221  --show-source --show-pep8 nagios.py
-  pylint -r n nagios.py
+= Notes:
 
-How to create the documentation:
+This file tends to be PEP-8 compliant. Use these commands to be
+proud of your work:
+
+* using pep8:
+
+  pep8 --ignore=E111 --ignore=E221  \
+  --show-source --show-pep8 pynagios/pynagios.py
+
+* using pyling:
+
+  pylint --report=n --disable=R0902 pynagios/pynagios.py
+
+* How to create the documentation:
+
   pydoc -w  pynagios.pynagios
 
+= References:
 
-References:
-
-* How to write Nagios plugins: http://nagiosplug.sourceforge.net/developer-guidelines.html
+* How to write Nagios plugins:
+  http://nagiosplug.sourceforge.net/developer-guidelines.html
 
 """
 
@@ -25,7 +38,9 @@ __status__ = "Dev"
 
 
 class NagiosError(Exception):
-    """ Defines a custom error. This class just inherits from the standard Exception"""
+    """ Defines a custom error.
+        This class just inherits from the standard Exceptio
+    """
     pass
 
 
@@ -45,8 +60,7 @@ class Service:
     _text = "%(label)s is %(status)s %(value)s/%(max_level)s"
     _perfdata = None
 
-    def __init__(self, label, value=None, warn_level=None, crit_level=None,
-                 max_level=None):
+    def __init__(self, label):
         """ Create a Nagios service
 
             Keyword arguments:
@@ -57,17 +71,8 @@ class Service:
             max_level  -- the maximum level (default: None)
         """
 
-        # apply variables given by user
-        self.set_value(value)
+        # apply variable given by user
         self.set_label(label)
-
-        # defines default values if not given by user
-        if warn_level is not None:
-            self.set_warn_level(warn_level)
-        if crit_level is not None:
-            self.set_crit_level(crit_level)
-        if max_level is not None:
-            self.set_max_level(max_level)
 
     def __str__(self):
         output = ''
@@ -79,7 +84,6 @@ class Service:
             value = getattr(self, varname)
             output += varname + " = " + str(value) + "\n"
         return output
-
 
     def perfdata(self, min_level=0, label=None):
         """ enable perfdata
@@ -214,7 +218,7 @@ class Service:
             }
         )
 
-    def _commit(self):
+    def commit(self):
         """ Calculate the exit code and message of the service
             if perfdata, calculate perfdata
         """
@@ -224,6 +228,8 @@ class Service:
 
 
 class Nagios:
+    """This is the Nagios() class.
+    """
 
     status_codes = {'OK': 0, 'WARNING': 1, 'CRITICAL': 2, 'UNKNOWN': 3}
 
@@ -300,7 +306,7 @@ class Nagios:
         """Adds a service into the Nagios instance.
            It automatically calculates the exit status
         """
-        service._commit()
+        service.commit()
         self._services.append(service)
         if self.status is None:
             self.status = service.get_status()
