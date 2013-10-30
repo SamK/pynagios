@@ -99,3 +99,6 @@ The warning and critical levels can be string with percentage: ('13', '25%').
 The library will autmatically convert the percentage into the absolute values.
 However you cannot mix percentage and absolute values.
 
+For more informations, maybe execute this command: 
+
+    pydoc pynagios.pynagios.Nagios pynagios.pynagios.Service
