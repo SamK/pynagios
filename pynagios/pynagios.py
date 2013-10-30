@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 """
-This module is an attempt to calculate service availability for Nagios
-
-Doc: http://nagiosplug.sourceforge.net/developer-guidelines.html
+This module is an attempt to calculate Nagios results from a Python script
 
 This file tends to be PEP-8 compliant.
   pep8 --ignore=E111 --ignore=E221  --show-source --show-pep8 nagios.py
@@ -11,23 +9,28 @@ This file tends to be PEP-8 compliant.
 How to create the documentation:
   pydoc -w  pynagios.pynagios
 
+
+References:
+
+* How to write Nagios plugins: http://nagiosplug.sourceforge.net/developer-guidelines.html
+
 """
 
 import sys
 
 __author__ = "Samuel Krieg"
 __email__ = "samuel.krieg+github@gmail.com"
-__version__ = "0.1"
+__version__ = "0.11"
 __status__ = "Dev"
 
 
 class NagiosError(Exception):
-    """ There is a Nagios error"""
+    """ Defines a custom error. This class just inherits from the standard Exception"""
     pass
 
 
 class Service:
-    """This is the nagios service each service has one value and one status"""
+    """This is the nagios service. Each service has one value and one status"""
 
     label = None
     _value = None
@@ -156,6 +159,7 @@ class Service:
         return self.label
 
     def set_label(self, label):
+        """set the label of the service"""
         self.label = label
 
     def _calc_status(self):
@@ -210,7 +214,7 @@ class Service:
             }
         )
 
-    def commit(self):
+    def _commit(self):
         """ Calculate the exit code and message of the service
             if perfdata, calculate perfdata
         """
@@ -282,15 +286,21 @@ class Nagios:
                         (status1, status2))
 
     def exit_code(self, status=None):
+        """Returns the exit code based on the status"""
         if status is None:
             raise Exception("No Nagios Status given")
         return self.status_codes[status]
 
     def exit(self):
+        """Exit the script with the accurate Nagios status
+        """
         sys.exit(self.exit_code(self.status))
 
     def add(self, service):
-        service.commit()
+        """Adds a service into the Nagios instance.
+           It automatically calculates the exit status
+        """
+        service._commit()
         self._services.append(service)
         if self.status is None:
             self.status = service.get_status()
@@ -305,6 +315,8 @@ class Nagios:
             self.perfdata += ' ' + service.get_perfdata()
 
     def output(self):
+        """Prints the final result
+        """
         if not self._services:
             #raise Exception("wtf")
             raise NagiosError("No service defined")
