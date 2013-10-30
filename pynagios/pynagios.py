@@ -5,8 +5,11 @@ This module is an attempt to calculate service availability for Nagios
 Doc: http://nagiosplug.sourceforge.net/developer-guidelines.html
 
 This file tends to be PEP-8 compliant.
-pep8 --ignore=E111 --ignore=E221  --show-source --show-pep8 nagios.py
-pylint -r n nagios.py
+  pep8 --ignore=E111 --ignore=E221  --show-source --show-pep8 nagios.py
+  pylint -r n nagios.py
+
+How to create the documentation:
+  pydoc -w  pynagios.pynagios
 
 """
 
