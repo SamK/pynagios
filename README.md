@@ -28,9 +28,9 @@ Usage
 The basics steps are:
 
 1. import the module
-2. create one pynagios.Nagios() instance
-3. create one or more pynagios.Service() instances
-4. Add pynagios.Service() into the pynagios.Nagios() instance
+2. create one or more pynagios.Service() instances
+3. create one pynagios.Result() instance
+4. Add pynagios.Service() into the pynagios.Result() instance
 5. print the result
 6. exit
 
@@ -41,7 +41,7 @@ Example:
 from pynagios import pynagios
 
 # 2. create a nagios instance
-nagios = pynagios.Nagios()
+result = pynagios.Result()
 
 # 3. create the first service
 service1 = pynagios.Service("Service1")
@@ -60,14 +60,14 @@ service2.set_crit_level('95%')
 service2.perfdata()
 
 # 4. add the services into the nagios instance
-nagios.add(service1)
-nagios.add(service2)
+result.add(service1)
+result.add(service2)
 
 # 5. print the result
-print nagios.output()
+print result.output()
 
 # 6. exit with the appropriate
-nagios.exit()
+result.exit()
 ```
 
 The service value can be integers (1, 2, 3), floats (3.14, 13.37), or strings.
@@ -78,4 +78,4 @@ However you cannot mix percentage and absolute values.
 
 For more informations, maybe execute this command: 
 
-    pydoc pynagios.pynagios.Nagios pynagios.pynagios.Service
+    pydoc pynagios.pynagios.Result pynagios.pynagios.Service

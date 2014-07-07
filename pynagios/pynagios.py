@@ -225,13 +225,13 @@ class Service:
             self._calc_perfdata()
 
 
-class Nagios:
-    """This is the Nagios() class.
+class Result:
+    """ Will calculate and print the result
     """
 
     status_codes = {'OK': 0, 'WARNING': 1, 'CRITICAL': 2, 'UNKNOWN': 3}
 
-    #The list of the services appened to this Nagios instance
+    #The list of the services appened to this Results instance
     _services = []
 
     #The final perfdata string
@@ -301,7 +301,7 @@ class Nagios:
         sys.exit(self.exit_code(self.status))
 
     def add(self, service):
-        """Adds a service into the Nagios instance.
+        """Adds a service into the Result instance.
            It automatically calculates the exit status
         """
         service.commit()
