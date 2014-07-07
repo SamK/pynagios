@@ -44,14 +44,14 @@ from pynagios import pynagios
 nagios = pynagios.Nagios()
 
 # 3. create the first service
-service1 = pynagios.service("Service1")
+service1 = pynagios.Service("Service1")
 service1.set_value(230)
 service1.set_max_level(100)
 service1.set_warn_level(850)
 service1.set_crit_level(950)
 
 # 3b. create the second service
-service2 = pynagios.service("Service2")
+service2 = pynagios.Service("Service2")
 service2.set_value(75)
 service2.set_max_level(100)
 service2.set_warn_level('85%')
