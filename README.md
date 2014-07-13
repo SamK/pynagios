@@ -40,33 +40,33 @@ Example:
 # 1. import the module
 from pynagios import pynagios
 
-# 2. create a nagios instance
-result = pynagios.Result()
-
-# 3. create the first service
+# 2a. create the first service
 service1 = pynagios.Service("Service1")
 service1.set_value(230)
 service1.set_max_level(100)
 service1.set_warn_level(850)
 service1.set_crit_level(950)
 
-# 3b. create the second service
+# 2b. create the second service
 service2 = pynagios.Service("Service2")
 service2.set_value(75)
 service2.set_max_level(100)
 service2.set_warn_level('85%')
 service2.set_crit_level('95%')
-# 3c. enable perfdata for service2
+# 2c. If needed, enable perfdata
 service2.perfdata()
 
-# 4. add the services into the nagios instance
+# 3. create a "result" instance
+result = pynagios.Result()
+
+# 5. add the services into the nagios instance
 result.add(service1)
 result.add(service2)
 
 # 5. print the result
 print result.output()
 
-# 6. exit with the appropriate
+# 6. exit with the appropriate exit code
 result.exit()
 ```
 
