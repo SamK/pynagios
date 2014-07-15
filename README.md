@@ -70,12 +70,13 @@ print result.output()
 result.exit()
 ```
 
-The service value can be integers (1, 2, 3), floats (3.14, 13.37), or strings.
+The service value can be integers (1, 2, 3) or floats (3.14, 13.37). No string yet.
 
 The warning and critical levels can be string with percentage: ('13', '25%').
 The library will autmatically convert the percentage into the absolute values.
 However you cannot mix percentage and absolute values.
 
-For more informations, maybe execute this command: 
+For more informations, maybe execute one of these commands: 
 
-    pydoc pynagios.pynagios.Result pynagios.pynagios.Service
+    pydoc pynagios.pynagios.Result
+    pynagios.pynagios.Service
