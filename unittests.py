@@ -86,6 +86,34 @@ class Percent_Values_TestCase(SimpleServiceTestCase):
         self.assertEqual(self.result.status, 'CRITICAL')
 
 
+class No_Max_Value_TestCase(unittest.TestCase):
+    def setUp(self):
+        self.result = pynagios.Result()
+        self.service = pynagios.Service('no_max_value')
+        self.service.set_warn_level(80)
+        self.service.set_crit_level(90)
+
+    def test_result_ok(self):
+        self.service.set_value(10)
+        self.service.set_text('%(label)s has value of %(value)s')
+        self.result.add(self.service)
+        print self.result.output()
+        self.assertEqual(self.result.status, 'OK')
+
+    def test_result_warning(self):
+        self.service.set_value(81)
+        self.service.set_text('%(label)s has value of %(value)s')
+        self.result.add(self.service)
+        print self.result.output()
+        self.assertEqual(self.result.status, 'WARNING')
+
+    def test_result_critical(self):
+        self.service.set_value(91)
+        self.service.set_text('%(label)s has value of %(value)s')
+        self.result.add(self.service)
+        print self.result.output()
+        self.assertEqual(self.result.status, 'CRITICAL')
+
 class Exit_Code_TestCase(SimpleServiceTestCase):
 
     def test_exit_codes(self):
