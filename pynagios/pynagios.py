@@ -40,129 +40,67 @@ class NagiosError(Exception):
     """
     pass
 
+class Perfdata:
+    name = None
+    value = None
+    min_value = 0
+    max_value = None
+    warn_value = None
+    crit_value = None
+
 
 class Service:
     """This is the nagios service. Each service has one value and one status.
     """
 
-    label = None
+    name = None
     _value = None
     _status = None
     _text = None
 
-    _perfdata_label = None
-    _perfdata_min_level = 0
-    _max_level = None
-    _warn_level = None
-    _crit_level = None
-    _text = "%(label)s is %(status)s %(value)s/%(max_level)s"
-    _perfdata = None
+    max_level = None
+    warn_level = None
+    crit_level = None
+    _text = "%(name)s is %(status)s %(value)s/%(max_level)s"
 
-    def __init__(self, label):
+    def __init__(self, name):
         """ Create a Nagios service
-
+            a
             Keyword arguments:
-            label      -- The label of the service
+            name       -- The label of the service
             value      -- The value returned by the sensor (default: None)
             warn_level -- The warning level (default: None)
             crit_level -- The critical level (default: None)
-            max_level  -- the maximum level (default: None)
         """
 
         # apply variable given by user
-        self.set_label(label)
+        self.name = name
 
-    def __str__(self):
-        output = ''
-        variables = ['label', '_value', '_status', '_text',
-                     '_perfdata_min_level', '_max_level', '_perfdata_label',
-                     '_warn_level', '_crit_level',
-                     '_perfdata']
-        for varname in variables:
-            value = getattr(self, varname)
-            output += varname + " = " + str(value) + "\n"
-        return output
 
-    def perfdata(self, min_level=0, label=None):
-        """ enable perfdata
 
-            Keyword arguments:
-            min_level  -- the minimum value of the service (default: 0)
-            label      -- the service label (default: service label)
-        """
-        if label is None:
-            self._perfdata_label = self.label
-        else:
-            self._perfdata_label = label
 
-        self._perfdata_min_level = min_level
-
-    def get_perfdata(self):
-        """ returns the perfdata output
-            the service data must be commited before using it
-        """
-        return self._perfdata
-
-    def _dictvars(self):
-        """ Returns a dictionnary of useful values
-        """
-        return {'label': self.get_label(),
-                'status': self._status,
-                'value': self._value,
-                'max_level': self._max_level,
-                'crit_level': self._crit_level,
-                'warn_level': self._warn_level
-               }
-
-    def format_text(self, text):
+    #def format_text(self, text):
         """Formats a text for Nagios output
         """
+        """
         try:
-            return(text % self._dictvars())
+            dictvars = {'name': self.name,
+                        'status': self._status,
+                        'value': self._value,
+                        'max_level': self._max_level,
+                        'crit_level': self._crit_level,
+                        'warn_level': self._warn_level}
+            return(text % self.dictvars)
         except KeyError as err:
             print "Some keys are not existing in the dictionnary: \"%s\""  % \
                    (err.args)
             raise
+        """
 
-    def set_value(self, value):
-        """Set the value of the service"""
-        self._value = value
 
-    def set_min_level(self, value):
-        """set the minimum value of the service"""
-        self._perfdata_min_level = value
-
-    def set_max_level(self, value):
-        """set the maximum value of the service"""
-        self._max_level = value
-
-    def set_warn_level(self, value):
-        """set the warning level of the service"""
-        self._warn_level = value
-
-    def set_crit_level(self, value):
-        """set the critical value of the service"""
-        self._crit_level = value
-
-    def set_text(self, text):
-        """set the output text of the service"""
-        self._text = text
-
-    def get_text(self):
-        """get the output text of the service"""
-        return self._text
-
-    def get_status(self):
-        """get the Nagios status of the service"""
-        return self._status
-
-    def get_label(self):
-        """get the label of the service"""
-        return self.label
-
-    def set_label(self, label):
-        """set the label of the service"""
-        self.label = label
+    #
+    # calculation methods
+    #
 
     def _calc_status(self):
         """ determines the Nagios status of the service.
@@ -194,7 +132,7 @@ class Service:
     def _calc_perfdata(self):
         """calculate perfdata"""
         value = self._value
-        label = self._perfdata_label
+        label = self.name
         min_level = self._perfdata_min_level
         max_level = self._max_level
         warn_level = self._warn_level
@@ -221,29 +159,27 @@ class Service:
             if perfdata, calculate perfdata
         """
         self._calc_status()
-        if self._perfdata_label:
-            self._calc_perfdata()
+        self._calc_perfdata()
 
 
 class Result:
     """ Will calculate and print the result
     """
 
+    # the status codes
     status_codes = {'OK': 0, 'WARNING': 1, 'CRITICAL': 2, 'UNKNOWN': 3}
+    # The same status sorted from worst to best
+    status_order = ['CRITICAL', 'WARNING', 'UNKNOWN', 'OK']
 
     #The list of the services appened to this Results instance
-    _services = []
+    services = []
 
-    #The final perfdata string
-    perfdata = ''
-
-    text = ''
-    label = ''
+    name = None
+    text = None
+    status = None
 
     def __init__(self):
-        """The same status sorted from worst to best"""
-        self.status_order = ['CRITICAL', 'WARNING', 'UNKNOWN', 'OK']
-        self.status = None
+        pass
 
     def _status_worst(self, status1, status2):
         """Compares two Nagios statuses and returns the worst"""
@@ -295,19 +231,14 @@ class Result:
             raise Exception("No Nagios Status given")
         return self.status_codes[status]
 
-    def exit(self):
-        """Exit the script with the accurate Nagios status
-        """
-        sys.exit(self.exit_code(self.status))
-
     def add(self, service):
         """Adds a service into the Result instance.
            It automatically calculates the exit status
         """
         service.commit()
-        self._services.append(service)
+        self.services.append(service)
         if self.status is None:
-            self.status = service.get_status()
+            self.status = service.status
             self.label = service.get_label()
             self.text = service.format_text(service.get_text())
         elif self._status_lt(service.get_status(), self.status):
@@ -321,7 +252,7 @@ class Result:
     def output(self):
         """Prints the final result
         """
-        if not self._services:
+        if not self.services:
             #raise Exception("wtf")
             raise NagiosError("No service defined")
         output = self.status + " - " + self.text
