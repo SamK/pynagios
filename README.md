@@ -34,40 +34,31 @@ The basics steps are:
 5. print the result
 6. exit
 
-Example:
+Example 1: Simple result
 
 ```python
 # 1. import the module
-from pynagios import pynagios
+import nagios
 
 # 2a. create the first service
-service1 = pynagios.Service("Service1")
-service1.set_value(230)
-service1.set_max_level(100)
-service1.set_warn_level(850)
-service1.set_crit_level(950)
+service1 = nagios.Service("Service1")
+service1.value(230)
+service1.max_level(100)
+service1.warn_level(85)
+service1.crit_level(95)
 
-# 2b. create the second service
-service2 = pynagios.Service("Service2")
-service2.set_value(75)
-service2.set_max_level(100)
-service2.set_warn_level('85%')
-service2.set_crit_level('95%')
-# 2c. If needed, enable perfdata
-service2.perfdata()
-
-# 3. create a "result" instance
-result = pynagios.Result()
+# 3. create a "Result" instance
+result = nagios.Result()
 
 # 5. add the services into the nagios instance
 result.add(service1)
-result.add(service2)
 
 # 5. print the result
-print result.output()
+result.print()
 
 # 6. exit with the appropriate exit code
-result.exit()
+sys.exit(result.exit_code)
+
 ```
 
 The service value can be integers (1, 2, 3) or floats (3.14, 13.37). No string yet.
