@@ -25,30 +25,6 @@ proud of your work:
 
 """
 
-import sys
-
-__author__ = "Samuel Krieg"
-__email__ = "samuel.krieg+github@gmail.com"
-__version__ = "0.11"
-__status__ = "Prod"
-
-
-class NagiosError(Exception):
-    """ Defines a custom error.
-        This class just inherits from the standard Exception
-        and does nothing more but changing the name.
-    """
-    pass
-
-class Perfdata:
-    name = None
-    value = None
-    min_value = 0
-    max_value = None
-    warn_value = None
-    crit_value = None
-
-
 class Result:
     """ Will calculate and print the result
     """
