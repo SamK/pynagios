@@ -171,10 +171,11 @@ class StringServiceTestCase(unittest.TestCase):
 
     def setUp(self):
         self.service = nagios.Service('single_service')
-        self.check = nagios.Check()
+        self.service.stringvalues = True
         self.service.ok_level = 'ok'
         self.service.warn_level = 'warn'
         self.service.crit_level = 'crit'
+        self.check = nagios.Check()
 
 class String_Values_TestCase(StringServiceTestCase):
 
@@ -201,7 +202,7 @@ class String_Values_TestCase(StringServiceTestCase):
 
     def test_check_ok_exclude_ok(self):
         self.service.value = 'ok'
-        sefl.service.ok_level = None
+        self.service.ok_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'OK')
 
@@ -218,14 +219,14 @@ class String_Values_TestCase(StringServiceTestCase):
         self.assertEqual(self.check.status, 'OK')
 
     def test_check_warning_exclude_ok(self):
-        self.service.set_value = 'warn'
+        self.service.value = 'warn'
         self.service.ok_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'WARNING')
 
     def test_check_warning_exclude_warning(self):
         self.service.value = 'warn'
-        self.service.wan_level = None
+        self.service.warn_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'WARNING')
 
@@ -252,6 +253,7 @@ class String_Values_TestCase(StringServiceTestCase):
         self.service.crit_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'CRITICAL')
+
 
 
 if __name__ == "__main__":

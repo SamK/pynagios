@@ -8,7 +8,9 @@ class Service:
     name = None
     value = None
     status = None
+    stringvalues = False
 
+    ok_level = None
     max_level = None
     warn_level = None
     crit_level = None
@@ -48,35 +50,69 @@ class Service:
     # calculation methods
     #
 
-    def set_status(self):
-        """ set the Nagios status of the service.
-        """
+    def set_status_from_string_values(self):
+        if self.value == self.ok_level:
+            self.status = 'OK'
+        elif self.value == self.warn_level:
+            self.status = 'WARNING'
+        elif self.value == self.crit_level:
+            self.status = 'CRITICAL'
+        elif self.crit_level is None:
+            self.status = 'CRITICAL'
+        elif self.warn_level is None:
+            self.status = 'WARNING'
+        elif self.ok_level is None:
+            self.status = 'OK'
+        else:
+            self.status = 'UNKNOWN'
 
-        absolute_crit_level = self.crit_level
-        absolute_warn_level = self.warn_level
-        if isinstance(self.crit_level, basestring):
-            if (self.crit_level[-1] == '%' and self.warn_level[-1] == '%'):
-                #transformer les pourcentages en valeurs absolues
-                absolute_crit_level = int(self.crit_level[:-1])
-                absolute_warn_level = int(self.warn_level[:-1])
-                aboslute_crit_level = absolute_crit_level * self.max_level / 100
-                absolute_warn_level = absolute_warn_level * self.max_level / 100
-            elif (self.crit_level[-1] != '%' and self.warn_level[-1] != '%'):
-                #pas un pourcentage mais quand meme transformer en int
-                absolute_crit_level = int(self.crit_level)
-                absolute_warn_level = int(self.warn_level)
-            else:
-                raise NagiosError("Cannot mix percentages and absolute values")
 
+    def set_status_from_absolute_values(self, warn_level = None, crit_level = None):
+        # get default values if not specified
+        if warn_level is None:
+            warn_level = self.warn_level
+        if crit_level is None:
+            crit_level = self.crit_level
+        # set status based on value, warn and crit levels
         if self.value is None:
             self.status = 'UNKNOWN'
-        elif self.value >= absolute_crit_level:
+        elif self.value >= crit_level:
             self.status = 'CRITICAL'
-        elif self.value >= absolute_warn_level:
+        elif self.value >= warn_level:
             self.status = 'WARNING'
         else:
             self.status = 'OK'
 
+    def get_absolute_values_from_percents(self):
+        absolute_crit_level = int(self.crit_level[:-1])
+        absolute_warn_level = int(self.warn_level[:-1])
+        aboslute_crit_level = absolute_crit_level * self.max_level / 100
+        absolute_warn_level = absolute_warn_level * self.max_level / 100
+        return (absolute_warn_level, absolute_crit_level)
+
+    def get_absolute_values_from_numeric(self):
+        return (int(self.warn_level), int(self.crit_level))
+
+    def get_absolute_values(self):
+        if isinstance(self.crit_level, basestring):
+            if (self.crit_level.endswith('%') and self.warn_level.endswith('%')):
+                # we are dealing with percents
+                warn_level, crit_level = self.get_absolute_values_from_percents()
+            elif (not self.crit_level.endswith('%') and not self._warn_level.endswith('%')):
+                warn_level, crit_level = self.get_absolute_values_from_numeric()
+            else:
+                raise NagiosError("Cannot mix percentages and absolute values")
+        else:
+             warn_level = self.warn_level
+             crit_level = self.crit_level
+        return (warn_level, crit_level)
+
+    def set_status(self):
+        if self.stringvalues:
+            self.set_status_from_string_values()
+        else:
+            warn_level, crit_level = self.get_absolute_values()
+            self.set_status_from_absolute_values(warn_level, crit_level)
 
     def commit(self):
         """ Calculate the exit code and message of the service
