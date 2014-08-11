@@ -25,9 +25,7 @@ proud of your work:
 
 """
 
-import sys
-
-from result import Result
+from check import Check
 from service import Service
 from perfdata import Perfdata
 
