@@ -29,12 +29,12 @@ The basics steps are:
 
 1. import the module
 2. create one or more pynagios.Service() instances
-3. create one pynagios.Result() instance
-4. Add pynagios.Service() into the pynagios.Result() instance
+3. create one pynagios.Check() instance
+4. Add pynagios.Service() into the pynagios.Check() instance
 5. print the result
 6. exit
 
-Example 1: Simple result
+Example 1: Simple check
 
 ```python
 # 1. import the module
@@ -47,17 +47,17 @@ service1.max_level(100)
 service1.warn_level(85)
 service1.crit_level(95)
 
-# 3. create a "Result" instance
-result = nagios.Result()
+# 3. create a "Check" instance
+check = nagios.Check()
 
-# 5. add the services into the nagios instance
-result.add(service1)
+# 5. add the service into the nagios check
+check.add(service1)
 
 # 5. print the result
-result.print()
+print check.output()
 
 # 6. exit with the appropriate exit code
-sys.exit(result.exit_code)
+sys.exit(check.exit_code)
 
 ```
 
@@ -69,5 +69,5 @@ However you cannot mix percentage and absolute values.
 
 For more informations, maybe execute one of these commands: 
 
-    pydoc pynagios.pynagios.Result
-    pynagios.pynagios.Service
+    pydoc nagios.check
+    pydoc nagios.service
