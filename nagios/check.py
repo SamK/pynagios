@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-class Result:
-    """ Will calculate and print the result
+class Check:
+    """ Will calculate and print the check result
     """
 
     # the status codes
@@ -9,7 +9,7 @@ class Result:
     # The same status sorted from worst to best
     status_order = ['CRITICAL', 'WARNING', 'UNKNOWN', 'OK']
 
-    #The list of the services appened to this Results instance
+    #The list of the services appened to this Checks instance
     services = []
 
     name = None
@@ -42,13 +42,13 @@ class Result:
         sys.exit(self._exit_code(self.status))
 
     def add(self, service):
-        """Adds a service into the Result instance and
+        """Adds a service into the Check instance and
            sets new result status and text
            It automatically calculates the exit status
         """
         # commit service
         service.commit()
-        # Get new result status
+        # Get new check status
         if self.status is None or  self._status_lt(service.status, self.status):
             # status and text are not exisitng. Must create
             self.status = service.status
