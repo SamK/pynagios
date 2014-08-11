@@ -42,7 +42,7 @@ import nagios
 
 # 2a. create the first service
 service1 = nagios.Service("Service1")
-service1.value(230)
+service1.value(23)
 service1.max_level(100)
 service1.warn_level(85)
 service1.crit_level(95)

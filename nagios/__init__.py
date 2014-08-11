@@ -27,6 +27,10 @@ proud of your work:
 
 import sys
 
+from result import Result
+from service import Service
+from perfdata import Perfdata
+
 __author__ = "Samuel Krieg"
 __email__ = "samuel.krieg+github@gmail.com"
 __version__ = "0.11"
