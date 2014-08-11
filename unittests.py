@@ -169,8 +169,8 @@ class Exit_Code_TestCase(SimpleServiceTestCase):
 
 class StringServiceTestCase(unittest.TestCase):
     def setUp(self):
-        self.service = pynagios.Service('single_service')
-        self.check = pynagios.Check()
+        self.service = nagios.Service('single_service')
+        self.check = nagios.Check()
         self.service.set_ok_level('good')
         self.service.set_warn_level('meh')
         self.service.set_crit_level('ohno')
