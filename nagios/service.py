@@ -1,34 +1,8 @@
 #!/usr/bin/env python
-"""
-= Module description:
-
-This module is an attempt to calculate Nagios results from a Python script
-
-= Notes:
-
-This file tends to be PEP-8 compliant. Use these commands to be
-proud of your work:
-
-* using pep8:
-
-  pep8 --ignore=E111 --ignore=E221  \
-  --show-source --show-pep8 pynagios/pynagios.py
-
-* using pyling:
-
-  pylint --report=n --disable=R0902 pynagios/pynagios.py
-
-= References:
-
-* How to write Nagios plugins:
-  http://nagiosplug.sourceforge.net/developer-guidelines.html
-
-"""
-
-import sys
 
 class Service:
     """This is the nagios service. Each service has one value and one status.
+       it can have multiple perfdata values
     """
 
     name = None
@@ -107,30 +81,6 @@ class Service:
         else:
             self._status = 'OK'
 
-    def _calc_perfdata(self):
-        """calculate perfdata"""
-        value = self._value
-        label = self.name
-        min_level = self._perfdata_min_level
-        max_level = self._max_level
-        warn_level = self._warn_level
-        crit_level = self._crit_level
-        #Return the perfdata string of an item
-        self._perfdata = (
-            "'%(label)s'=%(value).2f;"
-            "%(warn_level)s;"
-            "%(crit_level)s;"
-            "%(min_level)s;"
-            "%(max_level)s" % \
-            {
-            'label': label,
-            'value': value,
-            'warn_level': warn_level,
-            'crit_level': crit_level,
-            'min_level': min_level,
-            'max_level': max_level
-            }
-        )
 
     def commit(self):
         """ Calculate the exit code and message of the service

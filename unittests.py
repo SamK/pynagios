@@ -7,6 +7,31 @@ import sys
 import nagios
 
 
+class ReadmeExamples(unittest.TestCase):
+
+    def test_example1
+
+        # 2a. create the first service
+        service1 = nagios.Service("Service1")
+        service1.value(230)
+        service1.max_level(100)
+        service1.warn_level(85)
+        service1.crit_level(95)
+
+        # 3. create a "Result" instance
+        result = nagios.Result()
+
+        # 5. add the services into the nagios instance
+        result.add(service1)
+
+        # 5. print the result
+        result.print()
+
+        # 6. exit with the appropriate exit code
+        sys.exit(result.exit_code)
+
+
+
 class SimpleServiceTestCase(unittest.TestCase):
     def setUp(self):
         self.result = nagios.Result()
