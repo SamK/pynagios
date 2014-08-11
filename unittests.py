@@ -165,12 +165,8 @@ class Exit_Code_TestCase(SimpleServiceTestCase):
         self.assertEqual(self.check.status_codes['WARNING'], 1)
         self.assertEqual(self.check.status_codes['CRITICAL'], 2)
         self.assertEqual(self.check.status_codes['UNKNOWN'], 3)
-        with self.assertRaises(Exception):
-            self.check.exit_code()
-            self.check.exit_code('a non existing status')
 
 
-"""
 class StringServiceTestCase(unittest.TestCase):
     def setUp(self):
         self.service = pynagios.Service('single_service')
@@ -181,42 +177,85 @@ class StringServiceTestCase(unittest.TestCase):
 
 class String_Values_TestCase(StringServiceTestCase):
 
-    def test_all_defined(self):
-        self.service.set_value('other')
-        self.service.set_ok_level('good')
-        self.service.set_warn_level('meh')
-        self.service.set_crit_level('ohno')
-        with self.assertRaises(Exception):
-            self.check.add(self.service)
+    #def test_ok_all_defined(self):
+    #def test_critical_all_defined(self):
+    #def test_warning_all_defined(self):
 
-    def test_ok(self):
-        self.service.set_value('something')
-        self.service.set_warn_level('meh')
-        self.service.set_crit_level('ohno')
+    def test_unknown_all_defined(self):
+        self.service.value = 'other'
+        self.service.ok_level = 'good'
+        self.service.warn_level = 'meh'
+        self.service.crit_level = 'ohno'
+        self.check.add(self.service)
+        self.assertEqual(self.check.status, 'UNKNOWN')
+        self.assertEqual(self.check.exit_code, 3)
+
+    def test_check_ok_exclude_ok(self):
+        self.service.value = 'something good'
+        self.service.warn_level = 'meh'
+        self.service.crit_level = 'ohno'
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'OK')
 
-    def test_warning(self):
-        self.service.set_value('something')
-        self.service.set_ok_level('good')
-        self.service.set_crit_level('ohno')
+    def test_check_ok_exclude_warning(self):
+        self.service.value = 'good'
+        self.service.ok_level = 'good'
+        self.service.crit_level = 'ohno'
+        self.check.add(self.service)
+        self.assertEqual(self.check.status, 'OK')
+
+    def test_check_ok_exclude_critical(self):
+        self.service.value = 'oki'
+        self.service.warn_level = 'meh'
+        self.service.ok_level = 'oki'
+        self.check.add(self.service)
+        self.assertEqual(self.check.status, 'OK')
+
+    def test_check_warning_exclude_ok(self):
+        self.service.set_value = 'meh'
+        self.service.warn_level = 'meh'
+        self.service.crit_level = 'ohno'
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'WARNING')
 
-
-    def test_critical(self):
-        self.service.set_value('something')
-        self.service.set_warn_level('meh')
-        self.service.set_crit_level('ohno')
+    def test_check_warning_exclude_warning(self):
+        self.service.value = 'something'
+        self.service.ok_level = 'good'
+        self.service.crit_level = 'ohno'
         self.check.add(self.service)
-        self.assertEqual(self.check.status, 'OK')
+        self.assertEqual(self.check.status, 'WARNING')
+
+    def test_check_warning_exclude_critical(self):
+        self.service.value = 'ohno'
+        self.service.ok_level = 'good'
+        self.service.warn_level = 'ohno'
+        self.check.add(self.service)
+        self.assertEqual(self.check.status, 'WARNING')
+
+    def test_check_critical_exclude_ok(self):
+        self.service.value = 'ohno'
+        self.service.warn_level = 'warnme'
+        self.service.crit_level = 'ohno'
+        self.check.add(self.service)
+        self.assertEqual(self.check.status, 'CRITICAL')
 
 
+    def test_check_critical_exclude_warning(self):
+        self.service.value = 'ohno'
+        self.service.ok_level = 'good'
+        self.service.crit_level = 'ohno'
+        self.check.add(self.service)
+        self.assertEqual(self.check.status, 'CRITICAL')
 
-    def test_warning(self):
-    def test_critical(self):
-    def test_default_undef(self):
-"""
+
+    def test_check_critical_exclude_critical(self):
+        self.service.set_value('something')
+        self.service.set_ok_level('oki')
+        self.service.set_warn_level('ohno')
+        self.check.add(self.service)
+        self.assertEqual(self.check.status, 'CRITICAL')
+
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
