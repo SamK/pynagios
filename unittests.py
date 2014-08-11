@@ -9,7 +9,7 @@ import nagios
 
 class ReadmeExamples(unittest.TestCase):
 
-    def test_example1
+    def test_example1():
 
         # 2a. create the first service
         service1 = nagios.Service("Service1")
@@ -25,7 +25,7 @@ class ReadmeExamples(unittest.TestCase):
         result.add(service1)
 
         # 5. print the result
-        result.print()
+        print result.output()
 
         # 6. exit with the appropriate exit code
         sys.exit(result.exit_code)
@@ -149,6 +149,54 @@ class Exit_Code_TestCase(SimpleServiceTestCase):
             self.result.exit_code()
             self.result.exit_code('a non existing status')
 
+
+"""
+class StringServiceTestCase(unittest.TestCase):
+    def setUp(self):
+        self.service = pynagios.Service('single_service')
+        self.result = pynagios.Result()
+        self.service.set_ok_level('good')
+        self.service.set_warn_level('meh')
+        self.service.set_crit_level('ohno')
+
+class String_Values_TestCase(StringServiceTestCase):
+
+    def test_all_defined(self):
+        self.service.set_value('other')
+        self.service.set_ok_level('good')
+        self.service.set_warn_level('meh')
+        self.service.set_crit_level('ohno')
+        with self.assertRaises(Exception):
+            self.result.add(self.service)
+
+    def test_ok(self):
+        self.service.set_value('something')
+        self.service.set_warn_level('meh')
+        self.service.set_crit_level('ohno')
+        self.result.add(self.service)
+        self.assertEqual(self.result.status, 'OK')
+
+    def test_warning(self):
+        self.service.set_value('something')
+        self.service.set_ok_level('good')
+        self.service.set_crit_level('ohno')
+        self.result.add(self.service)
+        self.assertEqual(self.result.status, 'WARNING')
+
+
+    def test_critical(self):
+        self.service.set_value('something')
+        self.service.set_warn_level('meh')
+        self.service.set_crit_level('ohno')
+        self.result.add(self.service)
+        self.assertEqual(self.result.status, 'OK')
+
+
+
+    def test_warning(self):
+    def test_critical(self):
+    def test_default_undef(self):
+"""
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
