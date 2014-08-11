@@ -31,7 +31,6 @@ class ReadmeExamples(unittest.TestCase):
         self.assertEqual(check.exit_code, 0)
 
 
-
 class SimpleServiceTestCase(unittest.TestCase):
     def setUp(self):
         self.check = nagios.Check()
@@ -40,7 +39,6 @@ class SimpleServiceTestCase(unittest.TestCase):
 
 
 class Test_Exceptions(SimpleServiceTestCase):
-
 
     def setUp(self):
         super(Test_Exceptions, self).setUp()
@@ -61,7 +59,6 @@ class Test_Exceptions(SimpleServiceTestCase):
         with self.assertRaises(Exception):
             self.check.add(self.service)
 
-
 class Absolute_Values_TestCase(SimpleServiceTestCase):
 
     def setUp(self):
@@ -73,22 +70,29 @@ class Absolute_Values_TestCase(SimpleServiceTestCase):
         self.service.value = 1
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'OK')
+        self.assertEqual(self.check.exit_code, 0)
+        self.assertEqual(self.check.output(), 'OK - single_service is OK 1/100')
 
     def test_check_warning(self):
         self.service.value = 81
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'WARNING')
+        self.assertEqual(self.check.exit_code, 1)
+        self.assertEqual(self.check.output(), 'WARNING - single_service is WARNING 81/100')
 
     def test_check_critical(self):
         self.service.value = 91
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'CRITICAL')
+        self.assertEqual(self.check.exit_code, 2)
+        self.assertEqual(self.check.output(), 'CRITICAL - single_service is CRITICAL 91/100')
 
     def test_no_value(self):
         self.service.value = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'UNKNOWN')
-
+        self.assertEqual(self.check.exit_code, 3)
+        self.assertEqual(self.check.output(), 'UNKNOWN - single_service is UNKNOWN None/100')
 
 
 class Percent_Values_TestCase(SimpleServiceTestCase):
@@ -102,16 +106,31 @@ class Percent_Values_TestCase(SimpleServiceTestCase):
         self.service.value = 1
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'OK')
+        self.assertEqual(self.check.exit_code, 0)
+        self.assertEqual(self.check.output(), 'OK - single_service is OK 1/100')
 
     def test_check_warning(self):
         self.service.value = 85
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'WARNING')
+        self.assertEqual(self.check.exit_code, 1)
+        self.assertEqual(self.check.output(), 'WARNING - single_service is WARNING 85/100')
 
     def test_check_critical(self):
         self.service.value = 95
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'CRITICAL')
+        self.assertEqual(self.check.exit_code, 2)
+        self.assertEqual(self.check.output(), 'CRITICAL - single_service is CRITICAL 95/100')
+
+
+    def test_check_unknown(self):
+        self.service.value = None
+        self.check.add(self.service)
+        self.assertEqual(self.check.status, 'UNKNOWN')
+        self.assertEqual(self.check.exit_code, 3)
+        self.assertEqual(self.check.output(), 'UNKNOWN - single_service is UNKNOWN None/100')
+
 
 
 class No_Max_Value_TestCase(unittest.TestCase):
@@ -125,21 +144,18 @@ class No_Max_Value_TestCase(unittest.TestCase):
         self.service.value = 10
         self.service.text = '%(name)s has value of %(value)s'
         self.check.add(self.service)
-        print self.check
         self.assertEqual(self.check.status, 'OK')
 
     def test_check_warning(self):
         self.service.value = 81
         self.service.text = '%(name)s has value of %(value)s'
         self.check.add(self.service)
-        print self.check
         self.assertEqual(self.check.status, 'WARNING')
 
     def test_check_critical(self):
         self.service.value = 91
         self.service.text = '%(name)s has value of %(value)s'
         self.check.add(self.service)
-        print self.check
         self.assertEqual(self.check.status, 'CRITICAL')
 
 class Exit_Code_TestCase(SimpleServiceTestCase):
