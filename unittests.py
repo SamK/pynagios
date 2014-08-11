@@ -168,93 +168,90 @@ class Exit_Code_TestCase(SimpleServiceTestCase):
 
 
 class StringServiceTestCase(unittest.TestCase):
+
     def setUp(self):
         self.service = nagios.Service('single_service')
         self.check = nagios.Check()
-        self.service.set_ok_level('good')
-        self.service.set_warn_level('meh')
-        self.service.set_crit_level('ohno')
+        self.service.ok_level = 'ok'
+        self.service.warn_level = 'warn'
+        self.service.crit_level = 'crit'
 
 class String_Values_TestCase(StringServiceTestCase):
 
-    #def test_ok_all_defined(self):
-    #def test_critical_all_defined(self):
-    #def test_warning_all_defined(self):
+    def test_ok_all_defined(self):
+        self.service.value = 'ok'
+        self.check.add(self.service)
+        self.assertEqual(self.check.status, 'OK')
+
+    def test_critical_all_defined(self):
+        self.service.value = 'crit'
+        self.check.add(self.service)
+        self.assertEqual(self.check.status, 'CRITICAL')
+
+    def test_warning_all_defined(self):
+        self.service.value = 'warn'
+        self.check.add(self.service)
+        self.assertEqual(self.check.status, 'WARNING')
 
     def test_unknown_all_defined(self):
         self.service.value = 'other'
-        self.service.ok_level = 'good'
-        self.service.warn_level = 'meh'
-        self.service.crit_level = 'ohno'
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'UNKNOWN')
         self.assertEqual(self.check.exit_code, 3)
 
     def test_check_ok_exclude_ok(self):
-        self.service.value = 'something good'
-        self.service.warn_level = 'meh'
-        self.service.crit_level = 'ohno'
+        self.service.value = 'ok'
+        sefl.service.ok_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'OK')
 
     def test_check_ok_exclude_warning(self):
-        self.service.value = 'good'
-        self.service.ok_level = 'good'
-        self.service.crit_level = 'ohno'
+        self.service.value = 'ok'
+        self.service.warn_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'OK')
 
     def test_check_ok_exclude_critical(self):
-        self.service.value = 'oki'
-        self.service.warn_level = 'meh'
-        self.service.ok_level = 'oki'
+        self.service.value = 'ok'
+        self.service.crit_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'OK')
 
     def test_check_warning_exclude_ok(self):
-        self.service.set_value = 'meh'
-        self.service.warn_level = 'meh'
-        self.service.crit_level = 'ohno'
+        self.service.set_value = 'warn'
+        self.service.ok_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'WARNING')
 
     def test_check_warning_exclude_warning(self):
-        self.service.value = 'something'
-        self.service.ok_level = 'good'
-        self.service.crit_level = 'ohno'
+        self.service.value = 'warn'
+        self.service.wan_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'WARNING')
 
     def test_check_warning_exclude_critical(self):
-        self.service.value = 'ohno'
-        self.service.ok_level = 'good'
-        self.service.warn_level = 'ohno'
+        self.service.value = 'warn'
+        self.service.crit_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'WARNING')
 
     def test_check_critical_exclude_ok(self):
-        self.service.value = 'ohno'
-        self.service.warn_level = 'warnme'
-        self.service.crit_level = 'ohno'
+        self.service.value = 'crit'
+        self.service.ok_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'CRITICAL')
-
 
     def test_check_critical_exclude_warning(self):
-        self.service.value = 'ohno'
-        self.service.ok_level = 'good'
-        self.service.crit_level = 'ohno'
+        self.service.value = 'crit'
+        self.service.warn_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'CRITICAL')
-
 
     def test_check_critical_exclude_critical(self):
-        self.service.set_value('something')
-        self.service.set_ok_level('oki')
-        self.service.set_warn_level('ohno')
+        self.service.value = 'crit'
+        self.service.crit_level = None
         self.check.add(self.service)
         self.assertEqual(self.check.status, 'CRITICAL')
-
 
 
 if __name__ == "__main__":
