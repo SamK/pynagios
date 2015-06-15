@@ -7,6 +7,7 @@ setup(name='PyNagios',
       description='Utility for Nagios scripts written in Python',
       author='Samuel Krieg',
       author_email='samuel.krieg+github@gmail.com',
-      url='https://github.com/samyboy/pynagios',
+      url='https://github.com/SamK/pynagios/tarball/0.1',
       packages=['pynagios'],
+      keywords = ['nagios']
      )
