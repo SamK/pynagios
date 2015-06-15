@@ -4,7 +4,7 @@ import unittest
 import sys
 
 
-import nagios
+import pynagios
 
 
 class ReadmeExamples(unittest.TestCase):
@@ -12,14 +12,14 @@ class ReadmeExamples(unittest.TestCase):
     def test_example1(self):
 
         # 2a. create the first service
-        service1 = nagios.Service("Service1")
+        service1 = pynagios.Service("Service1")
         service1.value = 23
         service1.max_level = 100
         service1.warn_level = 85
         service1.crit_level = 95
 
         # 3. create a "Check" instance
-        check = nagios.Check()
+        check = pynagios.Check()
 
         # 5. add the services into the nagios instance
         check.add(service1)
@@ -33,8 +33,8 @@ class ReadmeExamples(unittest.TestCase):
 
 class SimpleServiceTestCase(unittest.TestCase):
     def setUp(self):
-        self.check = nagios.Check()
-        self.service = nagios.Service('single_service')
+        self.check = pynagios.Check()
+        self.service = pynagios.Service('single_service')
         self.service.max_level = 100
 
 
@@ -135,8 +135,8 @@ class Percent_Values_TestCase(SimpleServiceTestCase):
 
 class No_Max_Value_TestCase(unittest.TestCase):
     def setUp(self):
-        self.check = nagios.Check()
-        self.service = nagios.Service('no_max_value')
+        self.check = pynagios.Check()
+        self.service = pynagios.Service('no_max_value')
         self.service.warn_level = 80
         self.service.crit_level = 90
 
@@ -170,12 +170,12 @@ class Exit_Code_TestCase(SimpleServiceTestCase):
 class StringServiceTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.service = nagios.Service('single_service')
+        self.service = pynagios.Service('single_service')
         self.service.stringvalues = True
         self.service.ok_level = 'ok'
         self.service.warn_level = 'warn'
         self.service.crit_level = 'crit'
-        self.check = nagios.Check()
+        self.check = pynagios.Check()
 
 class String_Values_TestCase(StringServiceTestCase):
 
