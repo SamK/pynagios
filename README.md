@@ -38,17 +38,17 @@ Example 1: Simple check
 
 ```python
 # 1. import the module
-import nagios
+import pynagios
 
 # 2a. create the first service
-service1 = nagios.Service("Service1")
+service1 = pynagios.Service("Service1")
 service1.value(23)
 service1.max_level(100)
 service1.warn_level(85)
 service1.crit_level(95)
 
 # 3. create a "Check" instance
-check = nagios.Check()
+check = pynagios.Check()
 
 # 5. add the service into the nagios check
 check.add(service1)
@@ -69,5 +69,5 @@ However you cannot mix percentage and absolute values.
 
 For more informations, maybe execute one of these commands: 
 
-    pydoc nagios.check
-    pydoc nagios.service
+    pydoc pynagios.check
+    pydoc pynagios.service
